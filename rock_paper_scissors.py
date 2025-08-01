@@ -1,5 +1,5 @@
 import random
-import plotly.graph_objects as go
+import matplotlib.pyplot as plt  # <- Replace Plotly with Matplotlib
 
 def play_round(player1_move, player2_move):
     if player1_move == player2_move:
@@ -54,12 +54,23 @@ def simulate(strategy1, strategy2, num_games):
         previous_winner = outcome
         previous_player2_move = player2_move
 
+    # Plot using matplotlib
     x = ['Player 1 Wins', 'Player 2 Wins', 'Ties']
     y = [player1_wins, player2_wins, ties]
 
-    fig = go.Figure(data=[go.Bar(x=x, y=y)])
-    fig.update_layout(title='Simulation Results', xaxis_title='Outcome', yaxis_title='Number of Games')
-    fig.show()
+    plt.figure(figsize=(6, 4))
+    bars = plt.bar(x, y, color=['green', 'red', 'gray'])
+    plt.title('Simulation Results')
+    plt.xlabel('Outcome')
+    plt.ylabel('Number of Games')
+
+    # Add values on top of bars
+    for bar in bars:
+        yval = bar.get_height()
+        plt.text(bar.get_x() + bar.get_width()/2, yval + 0.01 * max(y), f'{yval:.0f}', ha='center', va='bottom')
+
+    plt.tight_layout()
+    plt.show()
 
     print(f"Player 1 wins: {player1_wins} games")
     print(f"Player 2 wins: {player2_wins} games")
